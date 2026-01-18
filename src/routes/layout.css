@@ -1,0 +1,5 @@
+@import 'tailwindcss';
+
+@theme {
+    --color-soft-pink: #efd0ca;
+}
