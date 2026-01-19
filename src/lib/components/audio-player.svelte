@@ -10,7 +10,7 @@
 </script>
 
 <div>
-	<h2>{title}</h2>
+	<h2 class="text-xl text-gray-100">{title}</h2>
 	<audio bind:duration bind:currentTime={time} bind:paused {src}></audio>
 	<button onclick={() => (paused = !paused)}> Play</button>
 </div>
