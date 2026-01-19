@@ -1,7 +1,6 @@
 @import 'tailwindcss';
 
 @theme {
-    --color-soft-pink: #efd0ca;
-    --color-background: #712f79;
     --color-onyx: #141115;
+    --color-yellow-c: #c1df1f;
 }
