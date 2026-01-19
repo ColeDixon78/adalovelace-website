@@ -8,8 +8,8 @@
 	const columns = 10;
 	const xBandwidth = $derived(width / columns);
 	const yBandwidth = $derived(height / rows);
+	const radius = $derived(Math.min(Math.min(xBandwidth / 3, yBandwidth / 3), 24));
 	// const colorPalette = ['9e0031', '8e0045', '770058', '600047', '44001a'];
-
 	const colorPalette = ['650d1b', '823200', '9b3d12', 'ae8e1c', 'c1df1f'];
 	// const colorPalette = ['e3b505', '95190c', '610345', '107e7d', '044b7f'];
 	const colorArray: string[][] = $state(Array(rows).fill(Array(columns).fill('white')));
@@ -35,8 +35,16 @@
 	<svg class="flex-auto" bind:clientHeight={height} bind:clientWidth={width}>
 		{#each { length: rows }, row}
 			{#each { length: columns }, col}
-				<svg x={xBandwidth * col} y={yBandwidth * row} width={xBandwidth} height={yBandwidth}>
-					<circle cx={xBandwidth / 2} cy={yBandwidth / 2} r="20" fill={colorArray[row][col]} />
+				{@const color = colorArray[row][col]}
+				{@const staggerX = (Math.random() * xBandwidth) / 20}
+				{@const staggerY = (Math.random() * yBandwidth) / 20}
+				<svg
+					x={xBandwidth * col + staggerX}
+					y={yBandwidth * row + staggerY}
+					width={xBandwidth}
+					height={yBandwidth}
+				>
+					<circle class="light" cx={xBandwidth / 2} cy={yBandwidth / 2} r={radius} fill={color} />
 				</svg>
 			{/each}
 		{/each}
@@ -44,3 +52,9 @@
 
 	<AudioPlayer title="test" src={sample} />
 </main>
+
+<style>
+	.light {
+		filter: blur(0.18em) drop-shadow(0px 0px 8px white);
+	}
+</style>
