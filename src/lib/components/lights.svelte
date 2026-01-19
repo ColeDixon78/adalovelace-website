@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	let height = $state(0);
 	let width = $state(0);
 	let mouse = $state({ x: 0, y: 0 });
@@ -11,7 +12,9 @@
 	const radius = $derived(Math.min(Math.min(xBandwidth / 3, yBandwidth / 3), 40));
 	const colorPalettes = [
 		['9e0031', '8e0045', '770058', '600047', '44001a'],
-		['2d3047', '419d78', 'e0a458', 'ffdbb5', 'c04abc']
+		['af3bbf', 'a14ebf', '6c91bf', '5fb0b7', '5bc8af'],
+		['91f9e5', '76f7bf', '5fdd9d', '499167', '3f4531'],
+		['db995a', '654236', 'd6d4a0', 'da7635', 'e24e1b']
 	];
 	// const colorPalette = ['650d1b', '823200', '9b3d12', 'ae8e1c', 'c1df1f'];
 	// const colorPalette = ['e3b505', '95190c', '610345', '107e7d', '044b7f'];
@@ -37,8 +40,8 @@
 	$effect(() => {
 		updateColorPalette(colorPalettes[colorChoice % colorPalettes.length]);
 		randomizeColors();
-		setInterval(randomizeColors, 2000);
 	});
+	onMount(() => setInterval(randomizeColors, 2000));
 </script>
 
 <div
