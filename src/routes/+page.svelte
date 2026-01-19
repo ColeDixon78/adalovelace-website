@@ -3,45 +3,74 @@
 	import AudioPlayer from '$lib/components/audio-player.svelte';
 	let height = $state(0);
 	let width = $state(0);
-	const rows = 5;
+	let mouse = $state({ x: 0, y: 0 });
+	const rows = 6;
 	const columns = 10;
 	const lightCount = rows * columns;
 	const xBandwidth = $derived(width / columns);
 	const yBandwidth = $derived(height / rows);
-	const radius = $derived(Math.min(Math.min(xBandwidth / 3, yBandwidth / 3), 20));
-	// const colorPalette = ['9e0031', '8e0045', '770058', '600047', '44001a'];
+	const radius = $derived(Math.min(Math.min(xBandwidth / 3, yBandwidth / 3), 40));
+	const colorPalette = ['9e0031', '8e0045', '770058', '600047', '44001a'];
 	// const colorPalette = ['650d1b', '823200', '9b3d12', 'ae8e1c', 'c1df1f'];
 	// const colorPalette = ['e3b505', '95190c', '610345', '107e7d', '044b7f'];
-	const colorPalette = ['var1', 'var2', 'var3', 'var4', 'var5'];
 	const colorArray: string[] = $state(Array(lightCount).fill('white'));
 	function randomizeColors() {
-		for (let index = 0; index < rows; index++) {
-			const randomElement = colorPalette[Math.floor(Math.random() * colorPalette.length)];
-			colorArray[index] = '#' + randomElement;
+		const colorClasses = ['var1', 'var2', 'var3', 'var4', 'var5'];
+		for (let index = 0; index < lightCount; index++) {
+			const randomElement = colorClasses[Math.floor(Math.random() * colorClasses.length)];
+			colorArray[index] = randomElement;
 		}
 	}
-	function updateColorPalette() {
+	let ref: HTMLElement | undefined = $state();
+	function updateColorPalette(colors: string[]) {
 		//update css variables here
+		if (!ref) {
+			return;
+		}
+		for (let i = 0; i < colors.length; i++) {
+			ref.style.setProperty(`--light-color-${i + 1}`, '#' + colors[i]);
+		}
 	}
 
-	$effect(() => randomizeColors());
+	$effect(() => {
+		updateColorPalette(colorPalette);
+		randomizeColors();
+		setInterval(randomizeColors, 2000);
+	});
 </script>
 
-<main class="flex h-screen w-screen flex-col bg-onyx">
-	<h1 class="mx-8 mt-4 font-mono text-4xl font-semibold text-[#c1df1f]">Ada Lovelace</h1>
+<main
+	bind:this={ref}
+	onpointermove={(e) => {
+		mouse.x = e.clientX;
+		mouse.y = e.clientY;
+	}}
+	class="flex h-screen w-screen flex-col bg-onyx"
+>
+	<header class="border border-b-[#c1df1f] p-2">
+		<h1 class="font-mono text-4xl font-semibold text-[#c1df1f]">Ada Lovelace</h1>
+	</header>
 
 	<div
 		class="relative grid flex-auto grid-cols-10"
 		bind:clientHeight={height}
 		bind:clientWidth={width}
 	>
-		{#each { length: lightCount }}
+		{#each { length: lightCount }, index}
 			{@const staggerX = (Math.random() * xBandwidth) / 20}
 			{@const staggerY = (Math.random() * yBandwidth) / 20}
-			{@const staggerR = Math.random() * (radius / 4)}
-			{@const color = colorPalette[Math.floor(Math.random() * colorPalette.length)]}
+			{@const distance = Math.sqrt(
+				(mouse.x - (width * (index % columns)) / columns) ** 2 +
+					(mouse.y - (height * Math.floor(index % rows)) / rows) ** 2
+			)}
+			{@const staggerR = radius * (distance / width)}
+			{@const color = colorArray[index]}
 			<div class="relative col-span-1">
-				<div class="light {color}"></div>
+				<div
+					class="light {color}"
+					style="transform: translate({staggerX}px, {staggerY}px); width: {radius +
+						staggerR}px; height: {radius + staggerR}px;"
+				></div>
 			</div>
 		{/each}
 	</div>
@@ -50,50 +79,66 @@
 </main>
 
 <style>
-	main {
-		--light-color-1: #650d1b;
-		--light-color-2: #823200;
-		--light-color-3: #9b3d12;
-		--light-color-4: #ae8e1c;
-		--light-color-5: #c1df1f;
-	}
 	.light {
+		opacity: 0.8;
 		position: absolute;
 		top: calc(50% - 20px);
 		left: calc(50% - 20px);
-		width: 40px;
-		height: 40px;
 		border-radius: 50%;
+		background-color: #fff;
+		transition:
+			background-color 0.2s,
+			width 0.2s,
+			height 0.2s;
 	}
 
 	.var1 {
-		background-color: var(--light-color-1);
+		--my-color: var(--light-color-1);
+		border-style: solid;
+		border-color: var(--my-color);
+		background-color: var(--my-color);
 		box-shadow:
-			0 0 10px 0px #fff,
-			0 0 20px 0px var(--light-color-1);
+			inset 0 0 5px color-mix(in hsl, var(--my-color), #fff 30%),
+			0 0 10px 5px var(--my-color);
 	}
+
 	.var2 {
-		background-color: var(--light-color-2);
+		--my-color: var(--light-color-2);
+		border-style: solid;
+		border-color: var(--my-color);
+		background-color: var(--my-color);
 		box-shadow:
-			0 0 10px 0px #fff,
-			0 0 20px 0px var(--light-color-2);
+			inset 0 0 5px color-mix(in hsl, var(--my-color), #fff 30%),
+			0 0 10px 5px var(--my-color);
 	}
+
 	.var3 {
-		background-color: var(--light-color-3);
+		--my-color: var(--light-color-3);
+		border-style: solid;
+		border-color: var(--my-color);
+		background-color: var(--my-color);
 		box-shadow:
-			0 0 10px 0px #fff,
-			0 0 20px 0px var(--light-color-3);
+			inset 0 0 5px color-mix(in hsl, var(--my-color), #fff 30%),
+			0 0 10px 5px var(--my-color);
 	}
+
 	.var4 {
-		background-color: var(--light-color-4);
+		--my-color: var(--light-color-4);
+		border-style: solid;
+		border-color: var(--my-color);
+		background-color: var(--my-color);
 		box-shadow:
-			0 0 10px 0px #fff,
-			0 0 20px 0px var(--light-color-4);
+			inset 0 0 5px color-mix(in hsl, var(--my-color), #fff 30%),
+			0 0 10px 5px var(--my-color);
 	}
+
 	.var5 {
-		background-color: var(--light-color-5);
+		--my-color: var(--light-color-5);
+		border-style: solid;
+		border-color: var(--my-color);
+		background-color: var(--my-color);
 		box-shadow:
-			0 0 10px 0px #fff,
-			0 0 20px 0px var(--light-color-5);
+			inset 0 0 5px color-mix(in hsl, var(--my-color), #fff 30%),
+			0 0 10px 5px var(--my-color);
 	}
 </style>
