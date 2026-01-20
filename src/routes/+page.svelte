@@ -16,9 +16,9 @@
 	}}
 />
 
-<main class="flex h-screen w-screen flex-row bg-onyx">
-	<div class="absolute top-8 left-16 z-50 backdrop-blur-sm">
-		<h1 class="font-mono text-4xl font-semibold text-yellow-c">Ada Lovelace</h1>
+<main class="flex h-screen w-screen flex-row bg-onyx font-mono">
+	<div class="absolute top-8 left-16 z-50 p-4">
+		<h1 class="text-4xl font-semibold text-yellow-c">Ada Lovelace</h1>
 		<div class="flex flex-col gap-4">
 			<AudioPlayer title="Falls On You" src={sample} />
 			<AudioPlayer title="Through the TV" src={sample} />

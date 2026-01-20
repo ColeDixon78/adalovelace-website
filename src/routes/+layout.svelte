@@ -8,3 +8,12 @@
 <svelte:head><link rel="icon" href={favicon} /></svelte:head>
 
 {@render children()}
+
+<style>
+	:global(body) {
+		cursor: url('cursor.svg'), auto;
+	}
+	:global(body *:hover) {
+		cursor: url('cursor.svg'), auto;
+	}
+</style>

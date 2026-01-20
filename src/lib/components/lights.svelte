@@ -14,7 +14,8 @@
 		['9e0031', '8e0045', '770058', '600047', '44001a'],
 		['af3bbf', 'a14ebf', '6c91bf', '5fb0b7', '5bc8af'],
 		['91f9e5', '76f7bf', '5fdd9d', '499167', '3f4531'],
-		['db995a', '654236', 'd6d4a0', 'da7635', 'e24e1b']
+		['db995a', '654236', 'd6d4a0', 'da7635', 'e24e1b'],
+		['f4f1de', 'e07a5f', '3d405b', '81b29a', 'f2cc8f']
 	];
 	// const colorPalette = ['650d1b', '823200', '9b3d12', 'ae8e1c', 'c1df1f'];
 	// const colorPalette = ['e3b505', '95190c', '610345', '107e7d', '044b7f'];
@@ -84,7 +85,8 @@
 		transition:
 			background-color 0.4s,
 			width 0.2s,
-			height 0.2s;
+			height 0.2s,
+			box-shadow 0.4s;
 	}
 
 	.var1 {

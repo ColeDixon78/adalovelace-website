@@ -15,12 +15,12 @@
 	}
 </script>
 
-<div class="font-mono text-yellow-c">
+<div class="text-yellow-c">
 	<audio onended={() => (time = 0)} bind:duration bind:currentTime={time} bind:paused {src}></audio>
 	<button
 		class="flex w-full flex-auto justify-between text-xl hover:underline"
 		onclick={() => (paused = !paused)}
-		><h3>{title}</h3>
+		><h3 class="">{title}</h3>
 		{#if time === 0}
 			<p>{format(duration)}</p>
 		{:else}
